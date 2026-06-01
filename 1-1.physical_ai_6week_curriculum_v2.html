@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>피지컬 AI 재직자 전문가 과정 — 6주 60시간 커리큘럼 (v2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,700;1,500&family=Noto+Serif+KR:wght@400;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF5E9;
+    --paper-soft:#F2EBD8;
+    --ink:#0E1B36;
+    --ink-soft:#243353;
+    --gold:#B0892C;
+    --gold-light:#D9B86A;
+    --gold-pale:#F2E4BD;
+    --brick:#A63A28;
+    --leaf:#1B7F4E;
+    --line:rgba(14,27,54,.16);
+    --line-soft:rgba(14,27,54,.08);
+    --muted:#5A5F6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{
+    background:#E2D7BC;
+    font-family:'Pretendard',sans-serif;
+    color:var(--ink);
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  .toolbar{
+    position:fixed;top:18px;right:18px;z-index:50;
+    display:flex;gap:6px;
+  }
+  .tool-btn{
+    background:var(--ink);color:var(--paper);
+    border:none;border-radius:0;padding:10px 18px;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;
+    letter-spacing:.12em;cursor:pointer;text-transform:uppercase;
+    box-shadow:0 6px 18px rgba(0,0,0,.18);
+  }
+  .tool-btn:hover{background:var(--gold);}
+
+  .doc{
+    max-width:1180px;margin:30px auto;
+    background:var(--paper);
+    box-shadow:0 22px 60px rgba(0,0,0,.18);
+    padding:60px 70px 50px;
+    position:relative;
+  }
+
+  .meta{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-bottom:14px;border-bottom:1px solid var(--line);
+    font-family:'Space Grotesk',sans-serif;font-size:11px;
+    color:var(--ink-soft);letter-spacing:.16em;text-transform:uppercase;
+  }
+  .meta .label{
+    background:var(--ink);color:var(--paper);padding:3px 12px;
+    font-weight:600;letter-spacing:.2em;
+  }
+
+  .hero{margin-top:36px;display:grid;grid-template-columns:1.4fr 1fr;gap:48px;align-items:end;}
+  .hero-eyebrow{
+    font-family:'EB Garamond',serif;font-style:italic;font-weight:500;
+    font-size:16px;color:var(--gold);margin-bottom:14px;letter-spacing:.02em;
+  }
+  .hero-title{
+    font-family:'Noto Serif KR',serif;font-weight:900;
+    font-size:54px;line-height:1.05;color:var(--ink);letter-spacing:-.02em;
+  }
+  .hero-title .gold{border-bottom:5px solid var(--gold);padding-bottom:2px;}
+  .hero-title .brick{color:var(--brick);}
+  .hero-lead{
+    margin-top:20px;font-size:14.5px;line-height:1.7;color:var(--ink-soft);font-weight:500;
+  }
+  .hero-lead strong{color:var(--ink);font-weight:700;}
+
+  .stats{
+    margin-top:40px;display:grid;grid-template-columns:repeat(4,1fr);
+    border-top:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);
+  }
+  .stat{padding:20px 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px;}
+  .stat:last-child{border-right:none;}
+  .stat-num{
+    font-family:'Noto Serif KR',serif;font-weight:900;
+    font-size:40px;line-height:1;color:var(--ink);letter-spacing:-.02em;
+  }
+  .stat-num .unit{
+    font-family:'Pretendard',sans-serif;font-size:14px;font-weight:600;
+    color:var(--brick);margin-left:3px;
+  }
+  .stat-lbl{font-size:11.5px;color:var(--muted);font-weight:500;letter-spacing:.04em;margin-top:3px;}
+
+  .sec{margin-top:56px;}
+  .sec-h{
+    display:flex;align-items:baseline;gap:14px;margin-bottom:22px;
+    border-bottom:1px solid var(--line);padding-bottom:10px;
+  }
+  .sec-num{
+    font-family:'EB Garamond',serif;font-style:italic;font-weight:700;
+    font-size:24px;color:var(--gold);
+  }
+  .sec-t{font-family:'Noto Serif KR',serif;font-weight:900;font-size:23px;color:var(--ink);letter-spacing:-.01em;}
+  .sec-sub{margin-left:auto;font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.04em;}
+
+  .time-vis{display:grid;grid-template-columns:1.2fr 1fr;gap:34px;align-items:start;}
+  .bar-stack{display:flex;flex-direction:column;gap:8px;}
+  .bar-row{display:grid;grid-template-columns:30px 1fr 60px;gap:12px;align-items:center;}
+  .bar-tag{font-family:'EB Garamond',serif;font-style:italic;font-weight:700;font-size:13px;color:var(--gold);}
+  .bar-track{
+    background:var(--paper-soft);height:30px;position:relative;border:1px solid var(--line);
+    display:flex;align-items:center;
+  }
+  .bar-fill{
+    height:100%;width:100%;display:flex;align-items:center;
+    padding:0 14px;color:#fff;font-size:11.5px;font-weight:600;
+    letter-spacing:.02em;position:relative;
+  }
+  .bar-fill .badge{
+    margin-left:auto;font-family:'EB Garamond',serif;font-style:italic;font-weight:700;
+    font-size:12px;letter-spacing:.04em;opacity:.9;
+  }
+  /* 10시간 — 진한 색 (블록 강조) */
+  .bar-fill.h10{}
+  /* 5시간 — 옅은 색 (보조 블록) */
+  .bar-fill.h5{opacity:.55;}
+
+  /* 색상 (모두 풀바, 채도/명도로 5h vs 10h 구분) */
+  .bar-fill.ink{background:var(--ink);}
+  .bar-fill.brick{background:var(--brick);}
+  .bar-fill.gold{background:var(--gold);color:var(--ink);}
+  .bar-fill.leaf{background:var(--leaf);}
+  .bar-fill.indigo{background:#3D4F7A;}
+  .bar-fill.coral{background:#C8512D;}
+  .bar-fill.olive{background:#7A6B2C;}
+  .bar-hours{
+    font-family:'Noto Serif KR',serif;font-weight:700;font-size:14px;
+    color:var(--ink);text-align:right;
+  }
+  .bar-hours .h-lbl{
+    display:inline-block;padding:2px 8px;font-family:'Space Grotesk',sans-serif;
+    font-size:11px;font-weight:700;letter-spacing:.04em;
+  }
+  .bar-hours .h-lbl.h10{background:var(--ink);color:var(--paper);}
+  .bar-hours .h-lbl.h5{background:var(--paper-soft);color:var(--ink-soft);border:1px solid var(--line);}
+
+  .time-note{background:var(--ink);color:var(--paper);padding:24px 26px;position:relative;overflow:hidden;}
+  .time-note::before{
+    content:"";position:absolute;top:-20px;right:-20px;width:120px;height:120px;
+    background:var(--gold);opacity:.18;border-radius:50%;
+  }
+  .tn-h{
+    font-family:'EB Garamond',serif;font-style:italic;font-weight:700;
+    font-size:14px;color:var(--gold-light);letter-spacing:.04em;
+    margin-bottom:10px;position:relative;z-index:2;
+  }
+  .tn-t{font-family:'Noto Serif KR',serif;font-weight:700;font-size:18px;line-height:1.4;color:#fff;position:relative;z-index:2;margin-bottom:14px;}
+  .tn-list{display:flex;flex-direction:column;gap:10px;position:relative;z-index:2;}
+  .tn-item{display:flex;gap:10px;font-size:12.5px;line-height:1.55;color:rgba(255,255,255,.85);font-weight:500;}
+  .tn-item::before{content:"●";color:var(--gold-light);font-size:8px;margin-top:6px;flex-shrink:0;}
+  .tn-item strong{color:#fff;font-weight:700;}
+
+  /* === 주차 카드 — 목/금 분리 === */
+  .weeks{display:flex;flex-direction:column;gap:18px;}
+  .week{
+    background:#fff;border:1.5px solid var(--ink);
+    display:grid;grid-template-columns:90px 1fr;
+    grid-template-rows:auto 1fr;
+  }
+  .week-l{
+    grid-row:2;grid-column:1;
+    background:var(--ink);color:var(--paper);padding:22px 12px;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;gap:6px;
+  }
+  .week-l.brick{background:var(--brick);}
+  .week-l.gold{background:var(--gold);color:var(--ink);}
+  .week-l.leaf{background:var(--leaf);}
+  .week-l.indigo{background:#3D4F7A;}
+  .week-l.coral{background:#C8512D;}
+  .week-l.olive{background:#7A6B2C;}
+  .week-num-lbl{font-family:'Space Grotesk',sans-serif;font-size:9.5px;font-weight:600;letter-spacing:.2em;opacity:.7;}
+  .week-num{font-family:'Noto Serif KR',serif;font-weight:900;font-size:32px;line-height:1;}
+  .week-hr{font-family:'EB Garamond',serif;font-style:italic;font-weight:700;font-size:13px;margin-top:4px;}
+
+  /* 주차 목표 배너 — week 카드 상단, days 그리드 위에 위치 */
+  .week-goal{
+    grid-row:1;grid-column:1 / -1;
+    display:flex;align-items:flex-start;gap:14px;
+    background:linear-gradient(90deg, var(--paper-soft) 0%, #fff 100%);
+    padding:13px 22px 13px 24px;
+    border-bottom:1.5px solid var(--ink);
+    position:relative;
+  }
+  .week-goal::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold);
+  }
+  .wg-label{
+    font-family:'EB Garamond',serif;font-style:italic;font-weight:700;
+    font-size:13px;color:var(--gold);letter-spacing:.04em;
+    flex-shrink:0;padding-top:1px;
+    border-right:1px solid var(--line);padding-right:14px;
+  }
+  .wg-label .num{
+    font-family:'Noto Serif KR',serif;font-style:normal;font-weight:900;
+    font-size:14px;color:var(--brick);margin-right:4px;
+  }
+  .wg-text{
+    font-family:'Noto Serif KR',serif;font-weight:700;font-size:13.5px;
+    color:var(--ink);line-height:1.5;letter-spacing:-.005em;
+  }
+  .wg-text strong{
+    color:var(--brick);font-weight:900;font-size:15.5px;
+    display:inline-block;margin-bottom:2px;letter-spacing:-.01em;
+  }
+  .wg-text em{font-style:normal;border-bottom:2px solid var(--gold);padding-bottom:1px;}
+
+  .days{grid-row:2;grid-column:2;display:grid;grid-template-columns:1fr 1fr;}
+  .day{padding:20px 22px 22px;display:flex;flex-direction:column;gap:6px;position:relative;}
+  .day-thu{background:#fff;border-right:1px solid var(--line);}
+  .day-fri{background:#FBFAF4;}
+
+  .day-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px;}
+  .day-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;
+    color:var(--ink);letter-spacing:.18em;text-transform:uppercase;
+  }
+  .day-tag .dot{width:8px;height:8px;background:var(--ink);border-radius:50%;}
+  .day-fri .day-tag .dot{background:var(--brick);}
+  .day-time{font-family:'EB Garamond',serif;font-style:italic;font-weight:700;font-size:13px;color:var(--gold);}
+  .day-cat{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9.5px;
+    color:var(--gold);letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px;
+  }
+  .day-host{font-size:9.5px;color:var(--muted);font-weight:500;letter-spacing:.04em;}
+  .day-tit{
+    font-family:'Noto Serif KR',serif;font-weight:900;font-size:15.5px;
+    color:var(--ink);line-height:1.3;margin:2px 0 8px;letter-spacing:-.005em;
+  }
+  .day-acts{display:flex;flex-direction:column;gap:5px;border-top:1px dashed var(--line-soft);padding-top:8px;margin-top:2px;}
+  .day-act{display:grid;grid-template-columns:34px 1fr;gap:9px;align-items:start;font-size:11.5px;line-height:1.5;}
+  .day-time-s{font-family:'EB Garamond',serif;font-style:italic;font-weight:700;font-size:12px;color:var(--brick);}
+  .day-actt{color:var(--ink-soft);font-weight:500;}
+  .day-actt strong{color:var(--ink);font-weight:700;}
+
+  .day-meta{margin-top:auto;padding-top:10px;display:flex;flex-direction:column;gap:5px;}
+  .day-mrow{display:flex;gap:8px;font-size:10.5px;line-height:1.45;}
+  .day-mk{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9px;
+    color:var(--gold);letter-spacing:.14em;text-transform:uppercase;
+    flex-shrink:0;width:48px;padding-top:2px;
+  }
+  .day-mv{color:var(--ink-soft);font-weight:500;}
+  .day-mv strong{color:var(--ink);font-weight:600;}
+  .ai-tag{
+    display:inline-flex;align-items:center;gap:4px;
+    background:var(--gold-pale);color:var(--ink);
+    padding:1.5px 7px;font-size:10px;font-weight:600;
+    letter-spacing:.02em;border-left:2px solid var(--gold);
+  }
+  .talk-tag{
+    display:inline-flex;align-items:center;gap:4px;
+    background:#E8EEF7;color:var(--ink);
+    padding:1.5px 7px;font-size:10px;font-weight:600;
+    letter-spacing:.02em;border-left:2px solid #3D4F7A;
+  }
+  .award-tag{
+    display:inline-flex;align-items:center;gap:4px;
+    background:var(--brick);color:#fff;
+    padding:1.5px 7px;font-size:9.5px;font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;
+  }
+
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .feat{background:#fff;border:1.2px solid var(--line);padding:18px 20px;display:flex;flex-direction:column;gap:8px;position:relative;}
+  .feat::before{content:"";position:absolute;top:0;left:0;width:40px;height:3px;background:var(--gold);}
+  .feat.brick::before{background:var(--brick);}
+  .feat.leaf::before{background:var(--leaf);}
+  .feat-num{font-family:'EB Garamond',serif;font-style:italic;font-weight:700;font-size:13px;color:var(--gold);}
+  .feat-h{font-family:'Noto Serif KR',serif;font-weight:900;font-size:15px;color:var(--ink);line-height:1.3;}
+  .feat-d{font-size:12.5px;line-height:1.6;color:var(--ink-soft);font-weight:500;}
+  .feat-d strong{color:var(--ink);font-weight:700;}
+
+  .finale{margin-top:50px;background:var(--ink);color:var(--paper);padding:40px 48px;position:relative;overflow:hidden;}
+  .finale::before{content:"";position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:var(--gold);opacity:.16;border-radius:50%;}
+  .finale::after{content:"";position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;background:var(--brick);opacity:.18;border-radius:50%;}
+  .finale-eye{font-family:'EB Garamond',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--gold-light);letter-spacing:.04em;margin-bottom:18px;position:relative;z-index:2;}
+  .finale-h{font-family:'Noto Serif KR',serif;font-weight:900;font-size:30px;line-height:1.3;color:#fff;letter-spacing:-.01em;position:relative;z-index:2;}
+  .finale-h .accent{color:var(--gold-light);border-bottom:3px solid var(--gold);padding-bottom:2px;}
+  .finale-d{margin-top:16px;font-size:14px;color:rgba(255,255,255,.85);line-height:1.65;font-weight:500;position:relative;z-index:2;max-width:760px;}
+
+  .foot{margin-top:32px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+
+  @media print{
+    .toolbar{display:none;}
+    html,body{background:#fff;}
+    .doc{margin:0;box-shadow:none;max-width:none;padding:30px 40px;}
+    .week,.feat,.finale{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="tool-btn" id="editBtn">✏️ 편집</button>
+  <button class="tool-btn" id="saveBtn">💾 저장</button>
+  <button class="tool-btn" id="pdfBtn">🖨️ PDF</button>
+</div>
+
+<div class="doc" id="doc">
+
+  <div class="meta">
+    <span class="label">CURRICULUM · V2</span>
+    <span>2026 · Physical AI Expert Track · 6 Weeks · 12 Sessions · 60 Hours</span>
+  </div>
+
+  <div class="hero">
+    <div>
+      <div class="hero-eyebrow">— 재직자 중견 간부를 위한 6주 60시간 설계도</div>
+      <div class="hero-title">
+        <span style="font-size:38px;color:var(--muted);font-weight:700;display:block;margin-bottom:8px;letter-spacing:-.01em;">현장 데이터에서,</span>
+        <span class="brick">우리 공장만의</span><br>
+        <span class="gold">피지컬 AI</span><span style="color:var(--ink);">로.</span>
+      </div>
+    </div>
+    <div>
+      <div class="hero-lead">
+        남의 솔루션을 도입하는 시대는 끝났습니다. 이제 <strong>자사 공정의 데이터로 학습한 우리만의 AI</strong>가 경쟁력입니다.
+        <br><br>
+        매주 <strong>목요일 5시간 + 금요일 5시간</strong>, 두 번의 세션으로 6주를 진행합니다. 첫 목요일은 대한상공회의소에서 <strong>피지컬 AI 리더십</strong>으로 출발하고, 첫 금요일부터 한동대학교에서 <strong>센서·르키위 조립</strong>이 시작됩니다.
+        <br><br>
+        수강생은 <strong>코드를 직접 짜지 않습니다</strong>. ChatGPT·Claude로 코드를 생성·실행하고, 팀은 <strong>토의·협의</strong>로 문제를 해결합니다. 중견 간부의 시야로 본질에 집중할 수 있도록 설계했습니다.
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">60<span class="unit">시간</span></div>
+      <div class="stat-lbl">총 교육시간 · 12세션 × 5시간</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3<span class="unit">인 1팀</span></div>
+      <div class="stat-lbl">신청 기업 단위 팀 구성</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">5<span class="unit">블록</span></div>
+      <div class="stat-lbl">실습 블록 각 10시간 균등 배분</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">0<span class="unit">% 코딩</span></div>
+      <div class="stat-lbl">ChatGPT·Claude로 진행 · 팀 토의·협의 중심</div>
+    </div>
+  </div>
+
+  <!-- I. 시간 분배 -->
+  <div class="sec">
+    <div class="sec-h">
+      <span class="sec-num">I.</span>
+      <span class="sec-t">60시간을 어떻게 쓰는가</span>
+      <span class="sec-sub">5개 실습 블록 각 10h · 피지컬 AI 리더십 5h · 센서·르키위 조립 5h · 색의 농도가 시간 차이</span>
+    </div>
+
+    <div class="time-vis">
+      <div class="bar-stack">
+        <div class="bar-row">
+          <span class="bar-tag">①</span>
+          <div class="bar-track"><div class="bar-fill ink h5">피지컬 AI 리더십<span class="badge">5h</span></div></div>
+          <span class="bar-hours"><span class="h-lbl h5">5h</span></span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-tag">②</span>
+          <div class="bar-track"><div class="bar-fill brick h5">센서에서 르키위 조립<span class="badge">5h</span></div></div>
+          <span class="bar-hours"><span class="h-lbl h5">5h</span></span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-tag">③</span>
+          <div class="bar-track"><div class="bar-fill indigo h10">NUC 인프라·관제 시스템<span class="badge">10h</span></div></div>
+          <span class="bar-hours"><span class="h-lbl h10">10h</span></span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-tag">④</span>
+          <div class="bar-track"><div class="bar-fill olive h10">AI 모델링·VLM·듀얼캠<span class="badge">10h</span></div></div>
+          <span class="bar-hours"><span class="h-lbl h10">10h</span></span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-tag">⑤</span>
+          <div class="bar-track"><div class="bar-fill coral h10">로봇팔 대회·학습추론<span class="badge">10h</span></div></div>
+          <span class="bar-hours"><span class="h-lbl h10">10h</span></span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-tag">⑥</span>
+          <div class="bar-track"><div class="bar-fill gold h10">로봇팔·르키위 학습추론<span class="badge">10h</span></div></div>
+          <span class="bar-hours"><span class="h-lbl h10">10h</span></span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-tag">⑦</span>
+          <div class="bar-track"><div class="bar-fill leaf h10">팀 브리핑·정부과제·액션러닝<span class="badge">10h</span></div></div>
+          <span class="bar-hours"><span class="h-lbl h10">10h</span></span>
+        </div>
+      </div>
+
+      <div class="time-note">
+        <div class="tn-h">— 설계 원칙</div>
+        <div class="tn-t">매주 목·금 5시간 두 세션으로 나눠 집중력을 유지합니다.</div>
+        <div class="tn-list">
+          <div class="tn-item"><strong>5h × 12세션</strong> — 하루 종일 강의의 피로감을 차단합니다.</div>
+          <div class="tn-item"><strong>블록당 2세션</strong> — 목·금이 하나의 블록을 이뤄 완결성 확보.</div>
+          <div class="tn-item"><strong>코딩 없이 진행</strong> — ChatGPT·Claude로 코드를 생성·실행. 손과 머리는 본질에 집중.</div>
+          <div class="tn-item"><strong>팀 토의·협의</strong> — 매 세션 토의·협의로 문제를 해결하며 의사결정 근육을 키웁니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- II. 주차별 — 목/금 분리 -->
+  <div class="sec">
+    <div class="sec-h">
+      <span class="sec-num">II.</span>
+      <span class="sec-t">6주 12세션, 한 주씩 어떻게 흘러가는가</span>
+      <span class="sec-sub">매주 목·금 13:00–18:00 · 각 5시간</span>
+    </div>
+
+    <div class="weeks">
+
+      <!-- WEEK 1 -->
+      <div class="week">
+        <div class="week-goal">
+          <div class="wg-label"><span class="num">W1</span>GOAL</div>
+          <div class="wg-text"><strong>우리만의 Physical AI 핵심기술 명제를 만들어보자.</strong><br>회사·인재·기술 세 축으로 <em>피지컬 AI 융합 리더십</em>을 이해하고, 자사의 <em>핵심기술 명제</em>와 <em>AI 팩토리 설계</em>를 완성한 뒤 센서·르키위 조립으로 손에 잡는다.</div>
+        </div>
+        <div class="week-l brick">
+          <div class="week-num-lbl">WEEK</div>
+          <div class="week-num">1</div>
+          <div class="week-hr">10h</div>
+        </div>
+        <div class="days">
+          <div class="day day-thu">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>목 · THU</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ① · 피지컬 AI 융합 리더십</div>
+            <div class="day-host">대한상공회의소 · 이론 4h + 실습 1h</div>
+            <div class="day-tit">중견 간부의 시야로 — 회사·인재·기술을 다시 보다</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>Physical AI 융합 리더십</strong> · 회사·인재·기술 세 축의 동시 재정의</span></div>
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>Physical AI가 현장을 바꾼다</strong> · 국내외 성공사례와 실패사례</span></div>
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>팀 토론 방식 교육방법론</strong> · 일방 강의가 아닌 토의·의견수렴으로 AI 융합능력 함양</span></div>
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>왜 과거 AI와 무엇이 다른가</strong> · 인지 AI에서 행동 AI로의 진화</span></div>
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>현장 데이터의 중요성</strong> · 버려지던 데이터에서 데이터 기반 경영으로</span></div>
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>AI 인프라의 중요성</strong> · Physical AI 시스템 운영·관리가 필요한 이유</span></div>
+              <div class="day-act"><span class="day-time-s">30m</span><span class="day-actt"><strong>실습 ① 핵심기술 명제 만들기</strong> · 우리 회사의 핵심기술은 무엇이어야 하는가, 1매로 정의</span></div>
+              <div class="day-act"><span class="day-time-s">30m</span><span class="day-actt"><strong>실습 ② 재직자 회사만의 AI 팩토리 설계</strong> · 자사 공정에 맞춘 AI 팩토리 초안 작성</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">핵심기술 명제 1매 + 자사 AI 팩토리 설계 1매</span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">융합 리더십 · 행동 AI · 핵심기술 명제 · AI 팩토리</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 회사·인재·기술 토론</span></span></div>
+            </div>
+          </div>
+          <div class="day day-fri">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>금 · FRI</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ② · 산학협력 + 센서·르키위 조립</div>
+            <div class="day-host">한동대 · 이론 2h + 실습 3h</div>
+            <div class="day-tit">중소기업이 유리한 이유를 듣고, 바로 손에 잡는다</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>중소기업의 Physical AI 경쟁력</strong> · 대기업보다 중소기업이 유리한 이유</span></div>
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>한동대 산학협력 비즈니스</strong> · 협력 트랙·정부과제·실증 인프라 활용</span></div>
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>핵심인재 관리의 리더십</strong> · 미래 위기 테크와 사내 인재 전략</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>실습 ① 센서·르키위 조립</strong> · 박스 개봉·부품 점검·바디 조립·센서 연결</span></div>
+              <div class="day-act"><span class="day-time-s">45m</span><span class="day-actt"><strong>실습 ② 조립 마무리·캘리브레이션</strong> · 잔여 부품 결합, STS3215 모터 영점·범위 보정</span></div>
+              <div class="day-act"><span class="day-time-s">45m</span><span class="day-actt"><strong>실습 ③ 르키위 제어</strong> · 기본 제어, 텔레옵 동작 확인, 정상 동작 검증</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">조립·캘리브레이션 완료된 르키위 1대 · 제어 동작 확인</span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">중소기업 경쟁력 · 산학협력 · LeKiwi · STS3215 · 캘리브레이션</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 팀 역할 분담 협의</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 2 -->
+      <div class="week">
+        <div class="week-goal">
+          <div class="wg-label"><span class="num">W2</span>GOAL</div>
+          <div class="wg-text"><strong>어떻게 많은 센서 데이터를 수집하고 관리하는가?</strong><br>카메라와 다양한 데이터를 모아 한눈에 보고 제어하는 <em>인프라 관제 시스템</em>을 팀별로 구성하고, 그 위에서 데이터를 수집한다.</div>
+        </div>
+        <div class="week-l indigo">
+          <div class="week-num-lbl">WEEK</div>
+          <div class="week-num">2</div>
+          <div class="week-hr">10h</div>
+        </div>
+        <div class="days">
+          <div class="day day-thu">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>목 · THU</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ③ · NUC 인프라·관제 시스템</div>
+            <div class="day-host">한동대 · 이론 1h + 실습 4h</div>
+            <div class="day-tit">카메라와 다양한 데이터를 모으는 관제 시스템 구성</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>왜 인프라 구축과 관제 시스템이 중요한가?</strong> · 단일 로봇 너머, 데이터·운영·확장을 결정하는 인프라의 가치</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>NUC 엣지 단말 셋업</strong> · OS 설치, 자동 시작 스크립트, SSH·원격 접속</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>카메라·센서 데이터 연동</strong> · 카메라 영상·텔레메트리·상태 데이터 수집 인프라</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>관제 데이터 흐름 설계</strong> · 센서→엣지→관제 파이프라인, ZMQ/ROS2 통신</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">카메라·데이터 통합 관제 인프라</span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">Intel NUC · Camera · ZMQ · ROS2 · 인프라 가치</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 관제 데이터 흐름 토의</span></span></div>
+            </div>
+          </div>
+          <div class="day day-fri">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>금 · FRI</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ③ · 팀별 인프라 관제 시스템</div>
+            <div class="day-host">한동대 · 다중 제어 + 관제 + 데이터셋</div>
+            <div class="day-tit">우리 팀만의 관제 시스템을 완성한다</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>키보드·조이스틱 제어</strong> · 팀별 인터페이스 설계, 입력 매핑</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>음성 제어 통합</strong> · Whisper 기반 음성 인식, 명령어 디자인</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>관제 대시보드 구축</strong> · 실시간 상태·영상·텔레메트리 통합 화면</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>데이터셋 구축</strong> · 텔레옵 실행 → dataset 저장 → 검증</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">팀별 관제 시스템 + 1차 dataset</span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">Teleop · Whisper · Dashboard · Dataset</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 인터페이스 설계 협의</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 3 -->
+      <div class="week">
+        <div class="week-goal">
+          <div class="wg-label"><span class="num">W3</span>GOAL</div>
+          <div class="wg-text"><strong>눈(카메라)으로 어떤 문제를 해결할 수 있는가?</strong><br>객체 인식부터 <em>VLM</em>까지 AI 모델링을 익히고, 듀얼캠 팀 프로젝트로 <em>자사 공정의 안전·품질 문제</em>를 직접 푸는 데모를 만들어낸다.</div>
+        </div>
+        <div class="week-l olive">
+          <div class="week-num-lbl">WEEK</div>
+          <div class="week-num">3</div>
+          <div class="week-hr">10h</div>
+        </div>
+        <div class="days">
+          <div class="day day-thu">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>목 · THU</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ④ · AI 모델링</div>
+            <div class="day-host">한동대 · 비전·AI 기초</div>
+            <div class="day-tit">로봇에 눈을 달고, 그 눈에 AI를 입힌다</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>객체 인식·추적</strong> · YOLO 실시간 탐지 + BoT-SORT 추적</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>영역 분할·지시 인식</strong> · MobileSAM · Grounding DINO 활용</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>VLM 적용</strong> · 시각-언어 모델로 영상 설명·상황 이해·자연어 명령 해석</span></div>
+              <div class="day-act"><span class="day-time-s">0.5h</span><span class="day-actt"><strong>VQA 실습</strong> · "이 영상에 무엇이 보이나요?" — 질의응답 적용</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>모델 파이프라인 통합</strong> · 여러 모델을 하나의 흐름으로 묶기</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">팀별 비전·VLM 파이프라인 1식</span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">YOLO · MobileSAM · VLM · VQA · BoT-SORT</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 모델 조합·적용 토의</span></span></div>
+            </div>
+          </div>
+          <div class="day day-fri">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>금 · FRI</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ④ · 팀 프로젝트 — 듀얼캠</div>
+            <div class="day-host">한동대 · 자사 시나리오 적용</div>
+            <div class="day-tit">듀얼 카메라로 자사 공장에 필요한 AI를 만든다</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>듀얼 카메라 셋업</strong> · 캘리브레이션, 영상 동기화, 깊이·영역 정보</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>프로젝트 주제 선정</strong> · 안전·이상감지·품질검사 등 자사 시나리오</span></div>
+              <div class="day-act"><span class="day-time-s">2h</span><span class="day-actt"><strong>팀별 듀얼캠 데모 구현</strong> · 듀얼캠 + AI 모델 결합으로 1개 시나리오 해결</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>중간 발표·피드백</strong> · 다음 주 로봇팔 대회 연계</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">팀별 듀얼캠 안전·품질 데모 1건</span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">Dual-Cam · Safety · Anomaly · QA</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 자사 시나리오 협의</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 4 -->
+      <div class="week">
+        <div class="week-goal">
+          <div class="wg-label"><span class="num">W4</span>GOAL</div>
+          <div class="wg-text"><strong>인간과 협력하는 로봇팔은 어떤 것인가?</strong><br>로봇팔 대회로 모방학습의 가치를 체험하고, <em>학습·추론의 첫 모델</em>을 자기 손으로 만들어낸다.</div>
+        </div>
+        <div class="week-l coral">
+          <div class="week-num-lbl">WEEK</div>
+          <div class="week-num">4</div>
+          <div class="week-hr">10h</div>
+        </div>
+        <div class="days">
+          <div class="day day-thu">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>목 · THU</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ⑤ · 로봇팔 대회</div>
+            <div class="day-host">한동대 · 팀 시나리오 도전</div>
+            <div class="day-tit">SO-ARM101 로봇팔로 3개 시나리오에 도전</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>SO-ARM101 기본 조작</strong> · 캘리브레이션, 텔레옵, 안전 점검</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>시나리오 브리핑·전략 협의</strong> · 픽앤플레이스·분류·조립 3개 시나리오 팀 전략</span></div>
+              <div class="day-act"><span class="day-time-s">2h</span><span class="day-actt"><strong>3개 시나리오 팀 도전</strong> · 팀별 도전·서로의 시도 관찰·실시간 피드백</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>팀별 결과 공유·토의</strong> · 잘 된 점·막힌 점 공유, 다음 단계 연결</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">시나리오별 성과 기록 + 시연 영상</span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">SO-ARM101 · Pick&Place · Sorting · Assembly</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 시나리오 전략 협의·발표</span></span></div>
+            </div>
+          </div>
+          <div class="day day-fri">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>금 · FRI</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ⑤ · 학습·추론 진입</div>
+            <div class="day-host">한동대 · 모방학습 시작</div>
+            <div class="day-tit">사람 시연을 AI가 학습하게 만든다</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>학습·추론 개념 정리</strong> · 모방학습·VLA 모델의 작동 원리</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>데이터 수집 (팀 시연)</strong> · 로봇팔로 작업 시연 → dataset 저장</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>ACT 모델 학습</strong> · 데이터셋 → 학습 파이프라인 → 모델 생성</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>추론 실행·결과 분석</strong> · 학습된 모델로 자동 실행, 정확도 평가</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">팀별 ACT 학습 모델 + 추론 결과</span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">Imitation Learning · ACT · 학습·추론</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 학습 결과 분석 토의</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 5 -->
+      <div class="week">
+        <div class="week-goal">
+          <div class="wg-label"><span class="num">W5</span>GOAL</div>
+          <div class="wg-text"><strong>인간으로부터 배운 것을 토대로 스스로 움직이는 자율 동작은 어떤 것인가?</strong><br>최신 VLA 모델을 비교 적용해 로봇팔과 르키위를 <em>스스로 움직이는 자율 동작 수준</em>까지 끌어올린다.</div>
+        </div>
+        <div class="week-l gold">
+          <div class="week-num-lbl">WEEK</div>
+          <div class="week-num">5</div>
+          <div class="week-hr">10h</div>
+        </div>
+        <div class="days">
+          <div class="day day-thu">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>목 · THU</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ⑤ · 로봇팔 학습·추론</div>
+            <div class="day-host">한동대 · 모방학습 심화</div>
+            <div class="day-tit">로봇팔이 스스로 작업을 수행하는 단계까지 끌어올린다</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>데이터 추가 수집·정제</strong> · W4에서 모은 데이터를 보완·라벨링·검증</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>로봇팔 모델 학습</strong> · ACT·SMOLVLA·π0 중 적합 모델로 본격 학습</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>추론 실행·튜닝</strong> · 학습 모델로 자동 작업, 실패 케이스 분석·재학습</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>모델 비교·최종 선정</strong> · 정확도·속도·일반화 기준으로 최적 모델 결정</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">로봇팔 학습·추론 모델 + 성능 기록</span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">ACT · SMOLVLA · π0 · 학습·추론</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 최적 모델 선정 토의</span></span></div>
+            </div>
+          </div>
+          <div class="day day-fri">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>금 · FRI</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ⑤ · 르키위 학습·추론</div>
+            <div class="day-host">한동대 · 르키위 자율 동작</div>
+            <div class="day-tit">르키위가 스스로 움직이는 순간을 만든다</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>르키위 데이터 수집</strong> · 이동·조작 시연 → dataset 저장</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>르키위 모델 학습</strong> · ACT 또는 SMOLVLA로 이동·조작 정책 학습</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>자율 추론 실행</strong> · 학습 모델로 르키위 자율 운행 검증·튜닝</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>팀별 자율 동작 공유·소회</strong> · 성공·실패 케이스 공유, 학습·추론 노하우 정리</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">르키위 자율 동작 모델 + 시연 영상</span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">Mobile Manipulation · 학습·추론 · 자율 운행</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 자율 동작 노하우 공유</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 6 -->
+      <div class="week">
+        <div class="week-goal">
+          <div class="wg-label"><span class="num">W6</span>GOAL</div>
+          <div class="wg-text"><strong>이제 우리만의 데이터로 Physical AI와 정부 과제를 만들어보자.</strong><br>산업형 AI 시스템 설계와 RAG로 회사 경험을 자산화하고, 정부과제·산학협력을 활용해 <em>나만의 AI 핵심기술</em>을 최종으로 완성한다.</div>
+        </div>
+        <div class="week-l leaf">
+          <div class="week-num-lbl">WEEK</div>
+          <div class="week-num">6</div>
+          <div class="week-hr">10h</div>
+        </div>
+        <div class="days">
+          <div class="day day-thu">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>목 · THU</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ⑥ · 산업형 AI 시스템 · 팀 재편</div>
+            <div class="day-host">한동대 · 이론 2h + 팀워크 3h</div>
+            <div class="day-tit">자사 AI 시스템의 설계도를 그리고, 팀을 다시 짠다</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>산업형 AI 시스템 구축 가이드</strong> · 자사 공정에 맞는 AI 시스템 아키텍처 설계 원칙</span></div>
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>RAG & QA 축적 시스템</strong> · 회사 경험·노하우를 AI 자산으로 바꾸는 지식 시스템</span></div>
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>나만의 AI 핵심기술</strong> · 5주간 학습을 자사 핵심기술로 최종 완성하는 전략</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>팀별 공장 브리핑</strong> · 자사 공정·페인 포인트·자동화 가능성 발표</span></div>
+              <div class="day-act"><span class="day-time-s">1h</span><span class="day-actt"><strong>정부과제·지원사업 매핑</strong> · 한동대 협력 가능 과제, 정부 지원사업 후보 공유</span></div>
+              <div class="day-act"><span class="day-time-s">40m</span><span class="day-actt"><strong>팀원 재선정·액션러닝 주제 확정</strong> · 현장 적용 가능성 기반 새 팀 구성, 풀어볼 진짜 문제 정의</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">자사 AI 시스템 설계도 · 팀 브리핑서 · 재편 팀 구성표</span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">산업형 AI · RAG · 핵심기술 · 정부과제 · 팀 재편</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 팀 브리핑·재편 협의</span></span></div>
+            </div>
+          </div>
+          <div class="day day-fri">
+            <div class="day-head"><span class="day-tag"><span class="dot"></span>금 · FRI</span><span class="day-time">5h</span></div>
+            <div class="day-cat">블록 ⑦ · 팀 액션러닝 · 핵심기술 최종 완성</div>
+            <div class="day-host">한동대 · 6주 마무리</div>
+            <div class="day-tit">나만의 AI 핵심기술을 손에 쥐고 자사로 돌아간다</div>
+            <div class="day-acts">
+              <div class="day-act"><span class="day-time-s">2h</span><span class="day-actt"><strong>액션러닝 — 솔루션 설계·프로토타입</strong> · 산업형 AI 시스템 가이드를 자사 PoC로 구현</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>팀별 최종 발표·토의</strong> · 나만의 AI 핵심기술 발표, 한동대·전문가와 토의·피드백</span></div>
+              <div class="day-act"><span class="day-time-s">1.5h</span><span class="day-actt"><strong>수료식·협력 후보 선정</strong> · 한동대 협력 PoC 후보 선정, 수료증 수여</span></div>
+            </div>
+            <div class="day-meta">
+              <div class="day-mrow"><span class="day-mk">산출물</span><span class="day-mv">나만의 AI 핵심기술 PoC + 제안서 + 수료증</span></div>
+              <div class="day-mrow"><span class="day-mk">팀플</span><span class="day-mv"><span class="talk-tag">💬 PoC 제안서 협의·발표</span></span></div>
+              <div class="day-mrow"><span class="day-mk">키워드</span><span class="day-mv">PoC · 핵심기술 · 한동대 협력 · 수료</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- III. 차별점 -->
+  <div class="sec">
+    <div class="sec-h">
+      <span class="sec-num">III.</span>
+      <span class="sec-t">왜 6주가 지루하지 않은가</span>
+      <span class="sec-sub">교육 설계 차별화 포인트</span>
+    </div>
+
+    <div class="features">
+      <div class="feat">
+        <div class="feat-num">i.</div>
+        <div class="feat-h">하루 5시간 두 번</div>
+        <div class="feat-d">하루 종일 강의의 피로감 대신 <strong>목·금 5시간씩 두 세션</strong>으로 분리. 매번 새 호흡으로 시작합니다.</div>
+      </div>
+      <div class="feat brick">
+        <div class="feat-num">ii.</div>
+        <div class="feat-h">코딩하지 않습니다</div>
+        <div class="feat-d">중견 간부가 코드 한 줄을 직접 짤 일이 없습니다. <strong>ChatGPT·Claude로 코드를 생성·실행</strong>하고, 사람은 무엇을 만들지 결정합니다.</div>
+      </div>
+      <div class="feat leaf">
+        <div class="feat-num">iii.</div>
+        <div class="feat-h">팀 토의·협의로 풉니다</div>
+        <div class="feat-d">매 세션에 <strong>팀 토의·협의</strong>가 포함됩니다. 자사 적용 시나리오·인터페이스·모델 선정·솔루션을 팀이 함께 결정합니다.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-num">iv.</div>
+        <div class="feat-h">첫 금요일부터 손으로</div>
+        <div class="feat-d">W1 금요일 첫 한동대 세션부터 <strong>르키위 박스를 뜯고 조립</strong>. 강의 듣다가 잠드는 일은 없습니다.</div>
+      </div>
+      <div class="feat brick">
+        <div class="feat-num">v.</div>
+        <div class="feat-h">W6 목 팀 재편</div>
+        <div class="feat-d">5주간 한 팀이었던 멤버를 <strong>공장 브리핑·정부과제 매핑 후 재편</strong>. 현장 적용 가능성 기준으로 새 조합을 짭니다.</div>
+      </div>
+      <div class="feat leaf">
+        <div class="feat-num">vi.</div>
+        <div class="feat-h">중견 간부의 시야로</div>
+        <div class="feat-d">코드 한 줄이 아니라 <strong>"이 기술을 우리 공장에 어떻게 적용할 것인가"</strong>를 매 세션 끝에 짚습니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="finale">
+    <div class="finale-eye">— THE OUTCOME · 6주 후</div>
+    <div class="finale-h">
+      르키위 조립부터 로봇팔 대회까지 직접 경험한 사내 인력,<br>
+      그리고 <span class="accent">자사 공정에 즉시 적용 가능한 PoC 1건</span>이 손에 남습니다.
+    </div>
+    <div class="finale-d">
+      이 6주는 단일 교육이 아닙니다. 한동대 협력 PoC → 정부 사업 연계로 이어지는 <strong style="color:var(--gold-light);">3단계 로드맵의 출발선</strong>입니다.
+      교육 종료 시점에서 각 팀은 자사 현장에 맞는 PoC 제안서를 들고 회사로 복귀하며, 한동대학교는 그 PoC를 함께 구축할 협력 후보를 식별합니다.
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>대한상공회의소 × 한동대학교</span>
+    <span>2026 · Physical AI Expert Track · 6 Weeks · 12 Sessions · 60 Hours</span>
+  </div>
+
+</div>
+
+<script>
+  const docEl = document.getElementById('doc');
+  const editBtn = document.getElementById('editBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const pdfBtn = document.getElementById('pdfBtn');
+
+  editBtn.addEventListener('click', () => {
+    const isEditing = docEl.contentEditable === 'true';
+    if (isEditing) {
+      docEl.contentEditable = 'false';
+      docEl.style.outline = '';
+      editBtn.textContent = '✏️ 편집';
+      editBtn.style.background = '';
+    } else {
+      docEl.contentEditable = 'true';
+      docEl.style.outline = '2px dashed var(--gold)';
+      docEl.style.outlineOffset = '6px';
+      editBtn.textContent = '✓ 종료';
+      editBtn.style.background = 'var(--brick)';
+    }
+  });
+
+  saveBtn.addEventListener('click', () => {
+    docEl.contentEditable = 'false';
+    docEl.style.outline = '';
+    const clone = document.documentElement.cloneNode(true);
+    clone.querySelector('.toolbar')?.remove();
+    const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+    const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    a.href = url;
+    a.download = `physical_ai_curriculum_${stamp}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  pdfBtn.addEventListener('click', () => {
+    docEl.contentEditable = 'false';
+    docEl.style.outline = '';
+    window.print();
+  });
+</script>
+</body>
+</html>
